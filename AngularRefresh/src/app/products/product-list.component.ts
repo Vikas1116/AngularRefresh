@@ -16,6 +16,16 @@ export class ProductListComponent implements OnInit {
   imageMargin = 2;
   errorMessage = ''
 
+  //using getter and setter for two way data binding
+  private _listFilter: string | undefined;
+  get listFilter1(): string | undefined{
+    return this._listFilter;
+  }
+  set listFilter1(value : string | undefined) {
+    this._listFilter = value;
+    this.performFilter(this.listFilter);
+  }
+
   filteredProducts: IProduct[] = [];
   products: IProduct[] = [];
 
@@ -25,12 +35,17 @@ export class ProductListComponent implements OnInit {
     this.productService.getProducts().subscribe({
       next: products => {
         this.products = products;
+        debugger
         this.performFilter(this.listFilter);
       },
       error: err => this.errorMessage = err
     });
   }
 
+  onFilterChange(filter: string): void{
+    this.listFilter = filter;
+    this.performFilter(this.listFilter);
+  }
   toggleImage(): void {
     this.showImage = !this.showImage;
   }
